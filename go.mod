@@ -1,4 +1,4 @@
-module github.com/elgohr/go-localstack
+module github.com/amimimor/go-localstack
 
 go 1.18
 
