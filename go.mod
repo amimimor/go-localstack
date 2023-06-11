@@ -12,6 +12,7 @@ require (
 	github.com/docker/docker v23.0.6+incompatible
 	github.com/docker/go-connections v0.4.0
 	github.com/elgohr/go-localstack v1.0.5
+	github.com/jinzhu/copier v0.3.5
 	github.com/maxbrunsfeld/counterfeiter/v6 v6.6.1
 	github.com/opencontainers/image-spec v1.0.2
 	github.com/sirupsen/logrus v1.9.0

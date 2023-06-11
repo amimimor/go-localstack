@@ -39,6 +39,7 @@ import (
 	"github.com/docker/go-connections/nat"
 	"github.com/sirupsen/logrus"
 	//"github.com/elgohr/go-localstack/internal"
+	"github.com/jinzhu/copier"
 )
 
 // Instance manages the localstack
@@ -302,28 +303,36 @@ func (i *Instance) startLocalstack(ctx context.Context, services ...Service) err
 		}
 	}
 
-	containerConfig, ok := ctx.Value("ContainerConfig").(*container.Config)
-	if !ok {
-		containerConfig = &container.Config{
-			Image:        imageName,
-			Env:          environmentVariables,
-			Labels:       i.labels,
-			Tty:          true,
-			AttachStdout: true,
-			AttachStderr: true,
+	containerConfig := &container.Config{
+		Image:        imageName,
+		Env:          environmentVariables,
+		Labels:       i.labels,
+		Tty:          true,
+		AttachStdout: true,
+		AttachStderr: true,
+	}
+
+	ctxContainerConfig, ok := ctx.Value("ContainerConfig").(*container.Config)
+	if ok {
+		if err := copier.CopyWithOption(containerConfig, ctxContainerConfig, copier.Option{IgnoreEmpty: true}); err != nil {
+			return err
 		}
 	}
 
-	hostConfig, ok := ctx.Value("HostConfig").(*container.HostConfig)
-	if !ok {
-		hostConfig = &container.HostConfig{
-			PortBindings: pm,
-			AutoRemove:   true,
+	hostConfig := &container.HostConfig{
+		PortBindings: pm,
+		AutoRemove:   true,
+	}
+
+	ctxHostConfig, ok := ctx.Value("HostConfig").(*container.HostConfig)
+	if ok {
+		if err := copier.CopyWithOption(hostConfig, ctxHostConfig, copier.Option{IgnoreEmpty: true}); err != nil {
+			return err
 		}
 	}
 
 	resp, err := i.cli.ContainerCreate(ctx,
-		containerConfig,
+		ctxContainerConfig,
 		hostConfig, nil, nil, "")
 	if err != nil {
 		return fmt.Errorf("localstack: could not create container: %w", err)
