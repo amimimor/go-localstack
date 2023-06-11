@@ -79,7 +79,7 @@ func TestInstance_Start_Fails(t *testing.T) {
 			when: "can't close after building image",
 			given: func(f *internalfakes.FakeDockerClient) *Instance {
 				f.ImageBuildReturns(types.ImageBuildResponse{Body: ErrCloser(strings.NewReader(""), errors.New("can't close"))}, nil)
-				f.ContainerCreateReturns(container.ContainerCreateCreatedBody{}, errors.New("can't create"))
+				f.ContainerCreateReturns(container.CreateResponse{}, errors.New("can't create"))
 				return &Instance{
 					cli: f,
 					log: logrus.StandardLogger(),
@@ -93,7 +93,7 @@ func TestInstance_Start_Fails(t *testing.T) {
 			when: "can't create container",
 			given: func(f *internalfakes.FakeDockerClient) *Instance {
 				f.ImageBuildReturns(types.ImageBuildResponse{Body: io.NopCloser(strings.NewReader(""))}, nil)
-				f.ContainerCreateReturns(container.ContainerCreateCreatedBody{}, errors.New("can't create"))
+				f.ContainerCreateReturns(container.CreateResponse{}, errors.New("can't create"))
 				return &Instance{
 					cli: f,
 					log: logrus.StandardLogger(),
