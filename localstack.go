@@ -310,6 +310,7 @@ func (i *Instance) startLocalstack(ctx context.Context, services ...Service) err
 		Tty:          true,
 		AttachStdout: true,
 		AttachStderr: true,
+		Cmd:          nil,
 	}
 
 	ctxContainerConfig, ok := ctx.Value("ContainerConfig").(*container.Config)
