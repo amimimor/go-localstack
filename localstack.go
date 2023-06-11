@@ -314,12 +314,17 @@ func (i *Instance) startLocalstack(ctx context.Context, services ...Service) err
 		}
 	}
 
-	resp, err := i.cli.ContainerCreate(ctx,
-		containerConfig,
-		&container.HostConfig{
+	hostConfig, ok := ctx.Value("HostConfig").(*container.HostConfig)
+	if !ok {
+		hostConfig = &container.HostConfig{
 			PortBindings: pm,
 			AutoRemove:   true,
-		}, nil, nil, "")
+		}
+	}
+
+	resp, err := i.cli.ContainerCreate(ctx,
+		containerConfig,
+		hostConfig, nil, nil, "")
 	if err != nil {
 		return fmt.Errorf("localstack: could not create container: %w", err)
 	}
