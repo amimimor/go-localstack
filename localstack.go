@@ -27,6 +27,7 @@ import (
 	"time"
 
 	"github.com/Masterminds/semver/v3"
+	"github.com/amimimor/go-localstack/internal"
 	"github.com/aws/aws-sdk-go-v2/aws"
 	"github.com/aws/aws-sdk-go-v2/config"
 	"github.com/aws/aws-sdk-go-v2/credentials"
@@ -37,8 +38,7 @@ import (
 	"github.com/docker/docker/client"
 	"github.com/docker/go-connections/nat"
 	"github.com/sirupsen/logrus"
-
-	"github.com/elgohr/go-localstack/internal"
+	//"github.com/elgohr/go-localstack/internal"
 )
 
 // Instance manages the localstack
