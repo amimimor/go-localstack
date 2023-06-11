@@ -6,10 +6,10 @@ import (
 	"io"
 	"sync"
 
+	"github.com/amimimor/go-localstack/internal"
 	"github.com/docker/docker/api/types"
 	"github.com/docker/docker/api/types/container"
 	"github.com/docker/docker/api/types/network"
-	"github.com/elgohr/go-localstack/internal"
 	v1 "github.com/opencontainers/image-spec/specs-go/v1"
 )
 
