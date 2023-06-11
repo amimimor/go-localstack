@@ -21,6 +21,11 @@ import (
 	_ "embed"
 	"errors"
 	"fmt"
+	"io"
+	"log"
+	"sync"
+	"time"
+
 	"github.com/Masterminds/semver/v3"
 	"github.com/aws/aws-sdk-go-v2/aws"
 	"github.com/aws/aws-sdk-go-v2/config"
@@ -32,10 +37,6 @@ import (
 	"github.com/docker/docker/client"
 	"github.com/docker/go-connections/nat"
 	"github.com/sirupsen/logrus"
-	"io"
-	"log"
-	"sync"
-	"time"
 
 	"github.com/elgohr/go-localstack/internal"
 )
@@ -301,15 +302,21 @@ func (i *Instance) startLocalstack(ctx context.Context, services ...Service) err
 		}
 	}
 
-	resp, err := i.cli.ContainerCreate(ctx,
-		&container.Config{
+	containerConfig, ok := ctx.Value("ContainerConfig").(*container.Config)
+	if !ok {
+		containerConfig = &container.Config{
 			Image:        imageName,
 			Env:          environmentVariables,
 			Labels:       i.labels,
 			Tty:          true,
 			AttachStdout: true,
 			AttachStderr: true,
-		}, &container.HostConfig{
+		}
+	}
+
+	resp, err := i.cli.ContainerCreate(ctx,
+		containerConfig,
+		&container.HostConfig{
 			PortBindings: pm,
 			AutoRemove:   true,
 		}, nil, nil, "")
