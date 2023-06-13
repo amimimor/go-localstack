@@ -315,7 +315,7 @@ func (i *Instance) startLocalstack(ctx context.Context, services ...Service) err
 
 	ctxContainerConfig, ok := ctx.Value("ContainerConfig").(*container.Config)
 	if ok {
-		if err := copier.CopyWithOption(containerConfig, ctxContainerConfig, copier.Option{IgnoreEmpty: false, DeepCopy: true}); err != nil {
+		if err := copier.CopyWithOption(containerConfig, ctxContainerConfig, copier.Option{IgnoreEmpty: true, DeepCopy: true}); err != nil {
 			return err
 		}
 	}
@@ -327,7 +327,7 @@ func (i *Instance) startLocalstack(ctx context.Context, services ...Service) err
 
 	ctxHostConfig, ok := ctx.Value("HostConfig").(*container.HostConfig)
 	if ok {
-		if err := copier.CopyWithOption(hostConfig, ctxHostConfig, copier.Option{IgnoreEmpty: false, DeepCopy: true}); err != nil {
+		if err := copier.CopyWithOption(hostConfig, ctxHostConfig, copier.Option{IgnoreEmpty: true, DeepCopy: true}); err != nil {
 			return err
 		}
 	}
